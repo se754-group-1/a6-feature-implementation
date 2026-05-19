@@ -1,0 +1,20 @@
+# Build output
+/target/
+
+# Java class files
+*.class
+
+# IDE files
+/.idea/
+/.vscode/
+*.iml
+
+# Log files
+*.log
+
+# GitHub Upgrade session files
+/.github/java-upgrade/
+
+# OS files
+.DS_Store
+Thumbs.db
