@@ -1,0 +1,27 @@
+services:
+  app:
+    build: .
+    image: learning-app:21
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -H 'Content-Type: application/json' -d '{\"questionId\": \"q1\", \"answer\": \"A\", \"userId\": \"health\"}' http://localhost:8080/api/answer > /dev/null 2>&1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  jmeter-ui:
+    image: guitarrapc/jmeter-gui:5.6.3-alpine3.23
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - .:/test
+    working_dir: /test
+    ports:
+      - "8081:8080"
+    tty: true
+    stdin_open: true
+    environment:
+      - DISPLAY=:99
