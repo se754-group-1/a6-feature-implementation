@@ -1,5 +1,19 @@
 # a6-feature-implementation
 
+## Notes and Prerequisites
+
+**Prerequisites:**
+
+- Docker compose [installation](https://docs.docker.com/compose/install/)
+- For Windows User to run the commands you can use Git Bash or alternatively use WSL, see [installation](https://learn.microsoft.com/en-us/windows/wsl/install). Then navigate to the project's directory via WSL.
+
+**Notes:**
+
+- This project intentionally uses Java 21 from the start; do not rely on Java 17 unless a tool (e.g., JMeter) requires it.
+- The Docker image includes a healthcheck that verifies `/api/answer` returns a successful response.
+
+**Commands**:
+
 This project runs on Java 21 (compiled and tested with OpenJDK 21).
 
 Run the app using Docker Compose:
@@ -51,7 +65,7 @@ curl -s -H "Content-Type: application/json" \
   http://localhost:8080/api/answer
 ```
 
-## JMeter performance test
+## JMeter Performance Test
 
 The included test plan is stored at `src/test/resources/performancetest/testplan.jmx`.
 
@@ -111,8 +125,3 @@ jmeter -n -t src/test/resources/performancetest/testplan.jmx -l target/jmeter-re
   - checks the response body contains `Correct`
 - `Summary Report`
   - captures metrics such as success, latency, thread counts, and response codes
-
-Notes:
-
-- This project intentionally uses Java 21 from the start; do not rely on Java 17 unless a tool (e.g., JMeter) requires it.
-- The Docker image includes a healthcheck that verifies `/api/answer` returns a successful response.
