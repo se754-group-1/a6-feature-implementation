@@ -1,0 +1,3 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+Submit Answer,19879050,0,0,37,0.70,0.000%,66273.22007,23992.33,19545.42,370.7
+TOTAL,19879050,0,0,37,0.70,0.000%,66273.22007,23992.33,19545.42,370.7
