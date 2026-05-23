@@ -13,16 +13,19 @@
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Load Users">
         <intProp name="ThreadGroup.num_threads">100</intProp>
-        <intProp name="ThreadGroup.ramp_time">10</intProp>
+        <intProp name="ThreadGroup.ramp_time">30</intProp>
+        <longProp name="ThreadGroup.duration">300</longProp>
+        <longProp name="ThreadGroup.delay">0</longProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">10</stringProp>
+          <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -32,7 +35,7 @@
           <stringProp name="HTTPSampler.implementation"></stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Submit Correct Answer">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Submit Correct Answer" enabled="true">
           <stringProp name="HTTPSampler.domain">${__P(server.host,localhost)}</stringProp>
           <stringProp name="HTTPSampler.port">${__P(server.port,8080)}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
@@ -65,7 +68,7 @@
             <stringProp name="DurationAssertion.duration">200</stringProp>
           </DurationAssertion>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert HTTP 200">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert HTTP 200" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
@@ -75,7 +78,7 @@
             <intProp name="Assertion.test_type">8</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Correct Feedback body">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Correct Feedback body" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-1334369504">&quot;correct&quot;\s*:\s*true</stringProp>
               <stringProp name="-1675149238">Correct</stringProp>
@@ -89,7 +92,7 @@
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -145,7 +148,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="Content-Type" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
@@ -158,7 +161,7 @@
             <stringProp name="DurationAssertion.duration">200</stringProp>
           </DurationAssertion>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert HTTP 200">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert HTTP 200" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
@@ -168,7 +171,7 @@
             <intProp name="Assertion.test_type">8</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Incorrect Feedback body">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Incorrect Feedback body" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="1570774481">&quot;correct&quot;\s*:\s*false</stringProp>
               <stringProp name="590583685">Incorrect</stringProp>
@@ -183,7 +186,7 @@
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -219,6 +222,11 @@
           </objProp>
           <stringProp name="filename"></stringProp>
         </ResultCollector>
+        <hashTree/>
+        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer">
+          <stringProp name="ConstantTimer.delay">5000</stringProp>
+          <stringProp name="RandomTimer.range">10000.0</stringProp>
+        </UniformRandomTimer>
         <hashTree/>
       </hashTree>
     </hashTree>

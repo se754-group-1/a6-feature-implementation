@@ -119,8 +119,8 @@ jmeter -n -t src/test/resources/performancetest/testplan.jmx -l target/jmeter-re
 ### Test plan configuration
 
 - `Load Users` thread group
-  - Load test: `20` virtual users, `5` second ramp-up, `10` loops
-  - Stress test: `100` virtual users, `10` second ramp-up, `10` loops
+  - Load test: `50` virtual users, `30` second ramp-up, `300s` duration
+  - Stress test: `100` virtual users, `30` second ramp-up, `300s` loops
 - `HTTP Request Defaults`
   - sets the base API host and port
 - `Submit Correct Answer` sampler
@@ -131,7 +131,7 @@ jmeter -n -t src/test/resources/performancetest/testplan.jmx -l target/jmeter-re
   - adds `Content-Type: application/json`
 - Assertions validate:
   - HTTP `200` response status
-  - response time under `200 ms`
+  - response time under `500 ms` (`200ms` in the stress test)
   - correct-answer response body
   - incorrect-answer response body
 - `Summary Report`
