@@ -1,0 +1,11 @@
+questionId,answer,userId,expectedCorrect,expectedAllowReattempt,expectedMessageContains
+q1,A,u1,true,true,Correct
+q1,B,u2,false,true,Incorrect
+q2,42,u3,true,true,Correct
+q2,24,u4,false,true,Incorrect
+q3,true,u5,true,true,Correct
+q3,false,u6,false,true,Incorrect
+q1,a,u7,true,true,Correct
+q2,wrong,u8,false,true,Incorrect
+q3,TRUE,u9,true,true,Correct
+q1,C,u10,false,true,Incorrect
