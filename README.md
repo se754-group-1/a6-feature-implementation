@@ -75,7 +75,8 @@ curl -s -H "Content-Type: application/json" \
 
 ## JMeter Performance Test
 
-The included test plan is stored at `src/test/resources/performancetest/testplan.jmx`.
+The included test plan is stored at `src/test/resources/performancetest/loadtestplan.jmx`.
+The included stress test is stored at `src/test/resources/performancetest/stresstestplan.jmx`.
 
 Run the app and the JMeter container together using Docker Compose:
 
@@ -106,8 +107,8 @@ jmeter -n -t src/test/resources/performancetest/testplan.jmx -l target/jmeter-re
 
 The JMeter results are written to:
 
-- `target/jmeter-results.jtl`
-- `target/jmeter.log`
+- `src/test/resources/performancetest/load-test-results.csv`
+- `src/test/resources/performancetest/stress-test-results.csv`
 
 If you want to run JMeter locally instead of via Docker Compose, you can still use:
 
@@ -118,18 +119,20 @@ jmeter -n -t src/test/resources/performancetest/testplan.jmx -l target/jmeter-re
 ### Test plan configuration
 
 - `Load Users` thread group
-  - `20` virtual users
-  - `5` second ramp-up
-  - `10` loops per user
-  - total requests = `200`
+  - Load test: `20` virtual users, `5` second ramp-up, `10` loops
+  - Stress test: `100` virtual users, `10` second ramp-up, `10` loops
 - `HTTP Request Defaults`
   - sets the base API host and port
-- `Submit Answer` sampler
-  - sends `POST /api/answer`
-  - request body is JSON: `{ "questionId": "q1", "answer": "A" }`
+- `Submit Correct Answer` sampler
+  - sends `POST /api/answer` with a correct answer
+- `Submit Incorrect Answer` sampler
+  - sends `POST /api/answer` with an incorrect answer
 - `HTTP Header Manager`
   - adds `Content-Type: application/json`
-- `Response Assertion`
-  - checks the response body contains `Correct`
+- Assertions validate:
+  - HTTP `200` response status
+  - response time under `200 ms`
+  - correct-answer response body
+  - incorrect-answer response body
 - `Summary Report`
-  - captures metrics such as success, latency, thread counts, and response codes
+  - captures response time, throughput, thread counts, success rate, and response codes
