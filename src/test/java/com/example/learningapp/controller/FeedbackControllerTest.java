@@ -28,11 +28,12 @@ public class FeedbackControllerTest {
         AnswerRequest req = new AnswerRequest();
         req.setQuestionId("q1");
         req.setAnswer("A");
+        req.setUserId("u1");
 
         AnswerResponse resp = new AnswerResponse(true, "Correct", "", "Next", true);
         when(feedbackService.evaluate(org.mockito.ArgumentMatchers.any())).thenReturn(resp);
 
-        String json = "{\"questionId\":\"q1\",\"answer\":\"A\"}";
+        String json = "{\"questionId\":\"q1\",\"answer\":\"A\",\"userId\":\"u1\"}";
 
         mockMvc.perform(post("/api/answer")
                         .contentType(MediaType.APPLICATION_JSON)
