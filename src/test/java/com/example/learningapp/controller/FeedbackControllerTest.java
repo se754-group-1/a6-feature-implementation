@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(controllers = FeedbackController.class)
 public class FeedbackControllerTest {
@@ -39,5 +40,54 @@ public class FeedbackControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void postAnswer_shouldReturnCorrectFeedback() throws Exception {
+        AnswerResponse resp = new AnswerResponse(
+                true,
+                "Correct — well done.",
+                "",
+                "Proceed to the next topic or try a similar question on OOP-Basics.",
+                true
+        );
+
+        when(feedbackService.evaluate(org.mockito.ArgumentMatchers.any())).thenReturn(resp);
+
+        String json = "{\"questionId\":\"q1\",\"answer\":\"A\",\"userId\":\"u1\"}";
+
+        mockMvc.perform(post("/api/answer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.correct").value(true))
+                .andExpect(jsonPath("$.message").value("Correct — well done."))
+                .andExpect(jsonPath("$.suggestion").value("Proceed to the next topic or try a similar question on OOP-Basics."))
+                .andExpect(jsonPath("$.allowReattempt").value(true));
+    }
+
+    @Test
+    public void postAnswer_shouldReturnIncorrectFeedback() throws Exception {
+        AnswerResponse resp = new AnswerResponse(
+                false,
+                "Incorrect — see explanation.",
+                "The correct answer is A because... (polymorphism applies)",
+                "Review the material for OOP-Basics and try a similar question.",
+                true
+        );
+
+        when(feedbackService.evaluate(org.mockito.ArgumentMatchers.any())).thenReturn(resp);
+
+        String json = "{\"questionId\":\"q1\",\"answer\":\"B\",\"userId\":\"u1\"}";
+
+        mockMvc.perform(post("/api/answer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.correct").value(false))
+                .andExpect(jsonPath("$.message").value("Incorrect — see explanation."))
+                .andExpect(jsonPath("$.explanation").value("The correct answer is A because... (polymorphism applies)"))
+                .andExpect(jsonPath("$.suggestion").value("Review the material for OOP-Basics and try a similar question."))
+                .andExpect(jsonPath("$.allowReattempt").value(true));
     }
 }
