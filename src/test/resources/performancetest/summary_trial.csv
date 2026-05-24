@@ -1,3 +1,0 @@
-Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
-Submit Answer,1200,3,2,21,0.83,100.000%,10.70129,5.77,2.27,552.0
-TOTAL,1200,3,2,21,0.83,100.000%,10.70129,5.77,2.27,552.0
