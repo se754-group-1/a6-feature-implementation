@@ -18,3 +18,4 @@
 # OS files
 .DS_Store
 Thumbs.db
+src/test/resources/performancetest/load_test_raw.csv

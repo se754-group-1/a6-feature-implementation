@@ -22,6 +22,18 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set - Mixed Correct and Incorrect Submissions">
+          <stringProp name="filename">/test/src/test/resources/performancetest/performance_test_data.csv</stringProp>
+          <stringProp name="fileEncoding">UTF-8</stringProp>
+          <stringProp name="variableNames">questionId,answer,userId,expectedCorrect,expectedAllowReattempt,expectedMessageContains</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
           <stringProp name="HTTPSampler.domain">app</stringProp>
           <stringProp name="HTTPSampler.port">8080</stringProp>
@@ -32,7 +44,21 @@
           <stringProp name="HTTPSampler.implementation"></stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Submit Answer">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="Content-Type" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time - 5 to 15 Seconds">
+          <stringProp name="ConstantTimer.delay">5000</stringProp>
+          <stringProp name="RandomTimer.range">10000</stringProp>
+        </UniformRandomTimer>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Submit Answer - Mixed Workload">
           <stringProp name="HTTPSampler.domain">app</stringProp>
           <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -46,10 +72,10 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{ &#xd;
-	&quot;questionId&quot;:&quot;q1&quot;, &#xd;
-	&quot;answer&quot;: &quot;A&quot;,&#xd;
-     &quot;userId&quot;: &quot;u1&quot; &#xd;
+                <stringProp name="Argument.value">{&#xd;
+  &quot;questionId&quot;: &quot;${questionId}&quot;,&#xd;
+  &quot;answer&quot;: &quot;${answer}&quot;,&#xd;
+  &quot;userId&quot;: &quot;${userId}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -57,27 +83,22 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="Content-Type" elementType="Header">
-                <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert HTTP 200">
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert HTTP 200" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="ResponseAssertion.test_type">8</intProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
-            <intProp name="Assertion.test_type">8</intProp>
+            <stringProp name="Assertion.custom_message">Valid POST /api/answer requests must return HTTP 200.</stringProp>
+            <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Required JSON Fields">
+          <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Assert Response Time Under 1000ms" enabled="true">
+            <stringProp name="DurationAssertion.duration">1000</stringProp>
+          </DurationAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Required JSON Fields" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="955164778">correct</stringProp>
               <stringProp name="954925063">message</stringProp>
@@ -88,9 +109,51 @@
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="ResponseAssertion.test_type">2</intProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.custom_message">Response body must contain correct, message, explanation, suggestion, and allowReattempt.</stringProp>
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="Assert Functional Correctness From CSV Data" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import groovy.json.JsonSlurper
+
+def responseText = prev.getResponseDataAsString()
+def json = new JsonSlurper().parseText(responseText)
+
+def expectedCorrect = vars.get(&quot;expectedCorrect&quot;).toBoolean()
+def expectedAllowReattempt = vars.get(&quot;expectedAllowReattempt&quot;).toBoolean()
+def expectedMessageContains = vars.get(&quot;expectedMessageContains&quot;)
+
+def failures = []
+
+if (json.correct != expectedCorrect) {
+    failures &lt;&lt; &quot;Expected correct=${expectedCorrect}, but got correct=${json.correct}. Response: ${responseText}&quot;
+}
+
+if (json.allowReattempt != expectedAllowReattempt) {
+    failures &lt;&lt; &quot;Expected allowReattempt=${expectedAllowReattempt}, but got allowReattempt=${json.allowReattempt}. Response: ${responseText}&quot;
+}
+
+if (json.message == null || !json.message.toString().contains(expectedMessageContains)) {
+    failures &lt;&lt; &quot;Expected message to contain &apos;${expectedMessageContains}&apos;, but got &apos;${json.message}&apos;. Response: ${responseText}&quot;
+}
+
+if (json.suggestion == null || json.suggestion.toString().trim().isEmpty()) {
+    failures &lt;&lt; &quot;Expected a non-empty suggestion field. Response: ${responseText}&quot;
+}
+
+if (json.explanation == null) {
+    failures &lt;&lt; &quot;Expected explanation field to exist. Response: ${responseText}&quot;
+}
+
+if (!failures.isEmpty()) {
+    AssertionResult.setFailure(true)
+    AssertionResult.setFailureMessage(failures.join(&quot; | &quot;))
+}</stringProp>
+          </JSR223Assertion>
           <hashTree/>
         </hashTree>
         <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
@@ -124,6 +187,44 @@
               <url>true</url>
               <threadCounts>true</threadCounts>
               <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename">/test/src/test/resources/performancetest/load_test.csv</stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
             </value>
           </objProp>
           <stringProp name="filename"></stringProp>
